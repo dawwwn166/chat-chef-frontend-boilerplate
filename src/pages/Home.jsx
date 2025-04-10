@@ -4,8 +4,44 @@ import Button from "../components/Button";
 const Home = () => {
   // logic
 
-  const handleStart = () => {
+  const handleStart = async() => {
     console.log("info페이지로 이동");
+    /*try {
+     //api 요청
+        //openai api 연결 여부 확인 코드 추가
+    // fetch 안에 backend url을 넣어주면 됨
+     const response = await fetch("http://localhost:8080/test");
+     const result = await response.json();    // 자바스크립트가 읽을 수 있는 형태인 json으로 변환
+      console.log(result); 
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // 예외 처리 코드 추가
+      // 프론트엔드 서버가 죽지 않도록 처리
+      // 예를 들어, 사용자에게 오류 메시지를 표시하거나 대체 동작을 수행할 수 있습니다.
+    } //예외 처리 해주는 코드 이걸 안하면 프론트 엔드 서버가 죽어버림
+ 
+    
+    */
+
+    // message api
+
+    try {
+      const response = await fetch("http://localhost:8080/message", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          userMessage: "안녕하세요",
+        }),
+      });
+
+      const result = response
+      console.log(result); // 서버에서 받은 응답
+
+    } catch (error) {
+    }
+
+
   };
 
   // view
