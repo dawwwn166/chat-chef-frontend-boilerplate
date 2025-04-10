@@ -44,50 +44,42 @@ const Chat = () => {
     if (error) setError(null); // 입력 시 에러 초기화
   };
 
-  const handleSubmit = async (event) => { // 함수명 오타 수정 (hadleSubmit -> handleSubmit)
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const userMessageContent = value.trim(); // 입력값 공백 제거
-
-    if (!userMessageContent) return; // 빈 메시지 전송 방지
-
+    const userMessageContent = value.trim();
+    if (!userMessageContent) return;
+  
     const newUserMessage = { role: "user", content: userMessageContent };
-
-    // 사용자 메시지를 먼저 화면에 표시 (Optimistic UI)
     const updatedMessages = [...messages, newUserMessage];
+  
     setMessages(updatedMessages);
-    setValue(""); // 입력 필드 비우기
-    setIsMessageLoading(true); // 로딩 시작
-    setError(null); // 에러 초기화
-
+    setValue("");
+    setIsMessageLoading(true);
+    setError(null);
+  
     try {
-      const response = await fetch(`${API_BASE_URL}/message`, { // 백엔드 /message 호출
+      const response = await fetch(`${API_BASE_URL}/message`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // 백엔드 server.js의 /message 라우트가 받는 형식에 맞춰 전송
-        // 이전 메시지 배열(사용자 메시지 포함 전)과 새 사용자 메시지를 분리해서 보낼 수도 있음
-        // body: JSON.stringify({ messages: messages, userMessage: newUserMessage }) // 이전 메시지와 새 메시지 함께
-         body: JSON.stringify({ messages: updatedMessages }) // 현재까지의 전체 메시지 전달 (server.js 로직에 따라 조정)
+        body: JSON.stringify({
+          messages, // 👈 이전 메시지
+          userMessage: newUserMessage, // 👈 새 사용자 메시지
+        }),
       });
-
+  
       if (!response.ok) {
-          const errorData = await response.json();
-          // API 에러 시, 사용자 메시지까지는 유지하고 에러 메시지 추가 또는 롤백
-          // 여기서는 에러 메시지만 표시
-          throw new Error(errorData.error || `메시지 전송 오류 (${response.status})`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `메시지 전송 오류 (${response.status})`);
       }
-
-      const result = await response.json(); // 백엔드에서 AI 응답만 data로 보낸다고 가정
-
-      // AI 응답을 메시지 목록에 추가
+  
+      const result = await response.json();
       setMessages([...updatedMessages, result.data]);
-
+  
     } catch (err) {
       console.error("메시지 전송 실패:", err);
       setError(err.message || "메시지를 처리하는 중 오류가 발생했습니다.");
-      // 실패 시 사용자 입력 메시지 제거 또는 에러 메시지 표시 강화 등 추가 처리 가능
-      // setMessages(messages); // Optimistic UI 롤백 (선택 사항)
     } finally {
-      setIsMessageLoading(false); // 로딩 종료
+      setIsMessageLoading(false);
     }
   };
 
