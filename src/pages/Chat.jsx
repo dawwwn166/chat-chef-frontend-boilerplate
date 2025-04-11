@@ -17,7 +17,8 @@ const Chat = () => {
   const navigate = useNavigate(); // 페이지 이동 함수
   const messagesEndRef = useRef(null); // 스크롤 맨 아래로 이동시키기 위한 ref
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080'; // 백엔드 주소
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://chat-chef-backend-410540418129.asia-northeast3.run.app'; // 백엔드 주소
+
 
   // --- Effects ---
   // 컴포넌트 마운트 시 Info 페이지에서 전달받은 초기 메시지 설정

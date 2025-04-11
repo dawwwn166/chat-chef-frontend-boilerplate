@@ -16,7 +16,7 @@ const Info = () => {
 
   // --- Hooks ---
   const navigate = useNavigate();
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080'; // 백엔드 주소
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://chat-chef-backend-410540418129.asia-northeast3.run.app'; // 백엔드 주소
 
   // --- Functions ---
   const addIngredient = () => {
